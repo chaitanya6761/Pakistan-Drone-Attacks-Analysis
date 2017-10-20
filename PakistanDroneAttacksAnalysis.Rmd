@@ -1,0 +1,37 @@
+---
+title: "Pakistan Drone Attacks Analysis"
+output:
+  html_document: default
+  html_notebook: default
+---
+
+## 1. Loading The Dataset And Required Imports
+```{r}
+library(ggplot2)
+library(scales)
+setwd("E:/MOOC")
+attacks <- read.csv("PakistanDroneAttacks.csv",stringsAsFactors=FALSE)
+```
+
+## 2. Dimensions Of Dataset
+```{r}
+dim(attacks)
+```
+
+## 3. Description of the variables and thier types.
+```{r}
+str(attacks)
+```
+
+## 4. Data Cleaning 
+As part of data cleaning lets transform some variables like date from chr to date format and replace NA's with zeros in other columns. Variables like province can be converted to factor variables.
+```{r}
+attacks$Date <- as.Date(attacks$Date,'%A, %B %d, %Y')
+attacks$Year <- format(attacks$Date,'%Y')
+attacks$City <- as.factor(attacks$City)
+attacks$Province <- factor(attacks$Province)
+attacks$tenure <- ifelse(attacks$Year <= 2008,"George W. Bush","Barack Obama") 
+str(attacks)
+```
+
+
