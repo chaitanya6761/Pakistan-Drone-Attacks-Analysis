@@ -6,7 +6,7 @@ output:
 ---
 
 ## 1. Loading The Dataset And Required Imports
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(ggplot2)
 library(scales)
 setwd("E:/MOOC")
@@ -24,7 +24,11 @@ str(attacks)
 ```
 
 ## 4. Data Cleaning 
-As part of data cleaning lets transform some variables like date from chr to date format and replace NA's with zeros in other columns. Variables like province can be converted to factor variables.
+As part of data cleanning, I have performed the foolowing operations on the dataset.
+1. Converted the given date format to standard date format.
+2. Added year column to dataset which can be used for timeline analysis.
+3. Converted the city and province variables to factor variables.
+4. Added tenure variable for tenure analysis.
 ```{r}
 attacks$Date <- as.Date(attacks$Date,'%A, %B %d, %Y')
 attacks$Year <- format(attacks$Date,'%Y')

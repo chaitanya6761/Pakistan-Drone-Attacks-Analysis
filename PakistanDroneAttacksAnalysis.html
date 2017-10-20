@@ -122,9 +122,8 @@ $(document).ready(function () {
 
 <div id="loading-the-dataset-and-required-imports" class="section level2">
 <h2>1. Loading The Dataset And Required Imports</h2>
-<pre class="r"><code>library(ggplot2)</code></pre>
-<pre><code>## Warning: package 'ggplot2' was built under R version 3.4.1</code></pre>
-<pre class="r"><code>library(scales)
+<pre class="r"><code>library(ggplot2)
+library(scales)
 setwd(&quot;E:/MOOC&quot;)
 attacks &lt;- read.csv(&quot;PakistanDroneAttacks.csv&quot;,stringsAsFactors=FALSE)</code></pre>
 </div>
@@ -165,7 +164,7 @@ attacks &lt;- read.csv(&quot;PakistanDroneAttacks.csv&quot;,stringsAsFactors=FAL
 </div>
 <div id="data-cleaning" class="section level2">
 <h2>4. Data Cleaning</h2>
-<p>As part of data cleaning lets transform some variables like date from chr to date format and replace NA’s with zeros in other columns. Variables like province can be converted to factor variables.</p>
+<p>As part of data cleanning, I have performed the foolowing operations on the dataset. 1. Converted the given date format to standard date format. 2. Added year column to dataset which can be used for timeline analysis. 3. Converted the city and province variables to factor variables. 4. Added tenure variable for tenure analysis.</p>
 <pre class="r"><code>attacks$Date &lt;- as.Date(attacks$Date,'%A, %B %d, %Y')
 attacks$Year &lt;- format(attacks$Date,'%Y')
 attacks$City &lt;- as.factor(attacks$City)
