@@ -39,3 +39,13 @@ str(attacks)
 ```
 
 
+```{r}
+ggplot(subset(attacks,!is.na(Year)),aes(Year,group=1)) + 
+geom_freqpoly(stat = "count",size=0.5,color="red")+
+geom_point(stat = "count")+  
+scale_y_continuous(breaks = seq(0,120,10))+  
+labs(x="Year",y="Number of Attacks",title="                                         Timeline Of Number Of Attacks")+
+theme_bw()
+```
+
+
