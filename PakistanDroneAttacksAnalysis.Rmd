@@ -24,19 +24,65 @@ str(attacks)
 ```
 
 ## 4. Data Cleaning 
-As part of data cleanning, I have performed the foolowing operations on the dataset.
-1. Converted the given date format to standard date format.
-2. Added year column to dataset which can be used for timeline analysis.
-3. Converted the city and province variables to factor variables.
-4. Added tenure variable for tenure analysis.
+* As part of data cleaning, I have performed the following operations on the dataset.
+ + Converted the given date format to standard date format.
+ + Added year column to dataset which can be used for timeline analysis.
+ + Converted the city and province variables to factor variables.
+ + Added tenure variable for tenure analysis.
+ + Removed the "Special.Mention..Site.", "Comments", "References", "Longitude", "Latitude", "Temperature.C.",  and "Temperature.F." columns, as they    won't be much useful for my exploration. 
 ```{r}
 attacks$Date <- as.Date(attacks$Date,'%A, %B %d, %Y')
 attacks$Year <- format(attacks$Date,'%Y')
 attacks$City <- as.factor(attacks$City)
 attacks$Province <- factor(attacks$Province)
-attacks$tenure <- ifelse(attacks$Year <= 2008,"George W. Bush","Barack Obama") 
+attacks$tenure <- ifelse(attacks$Year <= 2008,"George W. Bush","Barack Obama")
+attacks <- subset(attacks, select = -c(Comments,References,Longitude,Latitude,Temperature.C., Temperature.F., Special.Mention..Site.))
+
+# Removing NA Values
+attacks$Al.Qaeda[is.na(attacks$Al.Qaeda)] <- 0
+attacks$Taliban[is.na(attacks$Taliban)] <- 0
+attacks$Civilians.Min[is.na(attacks$Civilians.Min )] <- 0
+attacks$Civilians.Max[is.na(attacks$Civilians.Max)] <- 0
+attacks$Foreigners.Min[is.na(attacks$Foreigners.Min)] <- 0
+attacks$Foreigners.Max[is.na(attacks$Foreigners.Max)] <- 0
+attacks$Total.Died.Min[is.na(attacks$Total.Died.Min)] <- 0
+attacks$Total.Died.Mix[is.na(attacks$Total.Died.Mix)] <- 0
+attacks$Injured.Min[is.na(attacks$Injured.Min)] <- 0
+attacks$Injured.Max[is.na(attacks$Injured.Max)] <- 0
+
 str(attacks)
 ```
+
+## 5. Overall Metrics
+In this part of exploration lets explore the total number casualties occured till date:
+```{r}
+total_strikes <- sum(attacks$No.of.Strike)
+total_alqaeda <- sum(attacks$Al.Qaeda)
+total_taliban <- sum(attacks$Taliban)
+total_civilians <- sum(attacks$Civilians.Max)
+total_foreigners <- sum(attacks$Foreigners.Max)
+total_deaths <- sum(attacks$Total.Died.Mix)
+
+sprintf("Total Number Of Strikes : %s",total_strikes)
+sprintf("Total Number Of AL.Qaeda Terrorists Killed: %s",total_alqaeda)
+sprintf("Total Number Of Taliban Terrorists Killed: %s",total_taliban)
+sprintf("Total Number Of Civilian Casualties: %s",total_civilians)
+sprintf("Total Number of Foreigners killed: %s",total_foreigners)
+sprintf("Total Number of Deaths: %s",total_deaths)
+```
+
+```{r}
+ggplot(attacks,aes(x=Year,group=1))+
+  geom_line(stat = "summary",fun.y=sum,size=0.5,color="blue",aes(y=Civilians.Max))+
+  geom_point(stat = "summary",fun.y=sum,aes(y=Civilians.Max))+
+  geom_line(stat = "summary",fun.y=sum,size=0.5,color="red",aes(y=Al.Qaeda+Taliban))+
+  geom_point(stat = "summary",fun.y=sum,aes(y=Al.Qaeda+Taliban))+
+  labs(x="Year",y="Number Of Casualties Reported",title="Comparison Of Terrorists and Civilian Casualties")+
+  scale_y_continuous(breaks = seq(0,1000,100))+
+  theme_bw()
+```
+
+
 
 
 ```{r}
@@ -44,8 +90,15 @@ ggplot(subset(attacks,!is.na(Year)),aes(Year,group=1)) +
 geom_freqpoly(stat = "count",size=0.5,color="red")+
 geom_point(stat = "count")+  
 scale_y_continuous(breaks = seq(0,120,10))+  
-labs(x="Year",y="Number of Attacks",title="                                         Timeline Of Number Of Attacks")+
+labs(x="Year",y="Number of Attacks",title="Timeline Of Number Of Attacks")+
 theme_bw()
 ```
+
+
+
+
+
+
+
 
 
