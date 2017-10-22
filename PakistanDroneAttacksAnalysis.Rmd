@@ -35,7 +35,7 @@ attacks$Date <- as.Date(attacks$Date,'%A, %B %d, %Y')
 attacks$Year <- format(attacks$Date,'%Y')
 attacks$City <- as.factor(attacks$City)
 attacks$Province <- factor(attacks$Province)
-attacks$tenure <- ifelse(attacks$Year <= 2008,"George W. Bush","Barack Obama")
+attacks$Tenure <- ifelse(attacks$Year <= 2008,"George W. Bush","Barack Obama")
 attacks <- subset(attacks, select = -c(Comments,References,Longitude,Latitude,Temperature.C., Temperature.F., Special.Mention..Site.))
 
 # Removing NA Values
@@ -54,7 +54,7 @@ str(attacks)
 ```
 
 ## 5. Overall Metrics
-In this part of exploration lets explore the total number casualties occured till date:
+In this part of exploration lets explore the total number casualties occurred till date:
 ```{r}
 total_strikes <- sum(attacks$No.of.Strike)
 total_alqaeda <- sum(attacks$Al.Qaeda)
@@ -62,41 +62,41 @@ total_taliban <- sum(attacks$Taliban)
 total_civilians <- sum(attacks$Civilians.Max)
 total_foreigners <- sum(attacks$Foreigners.Max)
 total_deaths <- sum(attacks$Total.Died.Mix)
+total_Women_Children <- sum(attacks$Women.Children == 'Y')
 
 sprintf("Total Number Of Strikes : %s",total_strikes)
 sprintf("Total Number Of AL.Qaeda Terrorists Killed: %s",total_alqaeda)
 sprintf("Total Number Of Taliban Terrorists Killed: %s",total_taliban)
 sprintf("Total Number Of Civilian Casualties: %s",total_civilians)
-sprintf("Total Number of Foreigners killed: %s",total_foreigners)
-sprintf("Total Number of Deaths: %s",total_deaths)
+sprintf("Total Number Of Foreigners killed: %s",total_foreigners)
+sprintf("Total Number Of Deaths: %s",total_deaths)
+sprintf("Total Number Of Strikes That Included Women and Children: %s",total_Women_Children)
 ```
+The overall metrics show that a lot of civilian casualties were reported. The civilian casualties contribute to more than 67% of the total deaths. Now lets compare civilian casualties to number of terrorists killed over a year timeline.  
 
-```{r}
+## 6.Timeline Analysis
+```{r fig.width = 10, fig.height = 5}
+cols <- c("Civilians"="blue","Terrorits"="red")
 ggplot(attacks,aes(x=Year,group=1))+
-  geom_line(stat = "summary",fun.y=sum,size=0.5,color="blue",aes(y=Civilians.Max))+
+  geom_line(stat = "summary",fun.y=sum,size=0.5,aes(y=Civilians.Max,color="Civilians"))+
   geom_point(stat = "summary",fun.y=sum,aes(y=Civilians.Max))+
-  geom_line(stat = "summary",fun.y=sum,size=0.5,color="red",aes(y=Al.Qaeda+Taliban))+
+  geom_line(stat = "summary",fun.y=sum,size=0.5,aes(y=Al.Qaeda+Taliban,color="Terrorits"))+
   geom_point(stat = "summary",fun.y=sum,aes(y=Al.Qaeda+Taliban))+
-  labs(x="Year",y="Number Of Casualties Reported",title="Comparison Of Terrorists and Civilian Casualties")+
+  labs(x="Year",y="Number Of Casualties Reported",title="Timeline Comparison Of Terrorists and Civilian Casualties")+
+  scale_colour_manual(name="Civilians V/S Terrorists Killed",values=cols)+
   scale_y_continuous(breaks = seq(0,1000,100))+
   theme_bw()
 ```
 
-
-
-
-```{r}
-ggplot(subset(attacks,!is.na(Year)),aes(Year,group=1)) + 
-geom_freqpoly(stat = "count",size=0.5,color="red")+
-geom_point(stat = "count")+  
-scale_y_continuous(breaks = seq(0,120,10))+  
-labs(x="Year",y="Number of Attacks",title="Timeline Of Number Of Attacks")+
+The Timeline analysis shows that, till 2012 the number of civilian casualties reported were high when compared to the number of terrorists killed. Now lets explore the number of drone strikes carried out over year timeline. 
+```{r }
+ggplot(attacks,aes(Year,group=1)) + 
+geom_freqpoly(stat = "summary",fun.y=sum,size=0.5,color="red",aes(y=No.of.Strike))+
+geom_point(stat = "summary",fun.y=sum,aes(y=No.of.Strike))+  
+scale_y_continuous(breaks = seq(0,130,10))+  
+labs(x="Year",y="Number of Attacks",title="Timeline Of Number Of Drone strikes Carried Out")+
 theme_bw()
 ```
-
-
-
-
 
 
 
