@@ -144,7 +144,7 @@ mylog10_trans <- function (base = 10)
 }
 
 ggplot(subset(attacks,attacks$City != ""),aes(City))+
-  geom_bar(fill="#A52A2A")+
+  geom_bar(fill="#A52A2A", width = 0.5)+
   geom_text(stat='count',aes(label=..count..),hjust=-0.7)+
   scale_y_continuous(trans = "mylog10",limits = c(0,400))+
   labs(x="City Attacked",y="No Of Attacks Carried Out",title="City Wise Attacks")+
@@ -154,5 +154,16 @@ ggplot(subset(attacks,attacks$City != ""),aes(City))+
 
  * The City analysis shows that, most attacked cities are north and south waziristan. These two cities belong to the FATA province that's the reason why they are targeted the most.
  
+## 8. Tenure Analysis 
+ 
+```{r fig.width = 10, fig.height = 5}
+ggplot(subset(attacks,!is.na(attacks$Year)),aes(x=Year,fill=Tenure))+
+  geom_bar(color="black")+
+  geom_text(stat='count',aes(label=..count..),vjust=-1)+
+  scale_y_continuous(limits = c(0,120))+
+  labs(x="Year",y="Number of Attacks Carried Out",title="Tenure Analysis Of Number Of Attacks Carried Out")+
+  theme_bw()
+```
 
+ * Under Barack Obama's Presidency the us security organisations speed up their process to find (osama bin laden) and to neutralize other terrorists groups as well, that's the reason why we see most of the drone attacks were carried under his term as a president.    
 
