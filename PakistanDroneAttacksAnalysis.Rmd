@@ -85,7 +85,7 @@ geom_point(stat = "summary",fun.y=sum,aes(y=No.of.Strike))+
 scale_y_continuous(breaks = seq(0,130,10))+  
 labs(x="Year",y="Number of Attacks",title="Timeline Of Number Of Drone strikes Carried Out")+
 theme_bw()+
-theme(plot.title = element_text(hjust = 0.5,size = 14))
+theme(plot.title = element_text(hjust = 0.5,size = 14))+
 ggsave(filename = "outputs/fig-1.png",width = 7,height = 5)  
 ```
 
